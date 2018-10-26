@@ -1,0 +1,111 @@
+
+<div class="card">
+        <h3 class="text-center">
+                <font  style="height:5%;font-size: 14px;font-family: Verdana, Geneva, sans-serif;" 
+                color="#3f88b3">
+                <b>Users </b></font></h3>
+                <hr>
+    <div class="card-body">
+        <form #userForm="ngForm">
+            <p *ngIf="message" class="alert alert-success"> {{message}}</p>
+                  <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" class="form-control" id="first_name" 
+                    placeholder="FirstName"  required
+                    [(ngModel)]="user.first_name" name="first_name" #first_name="ngModel">
+                    <div [hidden]="first_name.valid || first_name.pristine"
+                         class="alert alert-danger">
+                        First Name is required
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="lastname">Last Name</label>
+                    <input type="text" class="form-control" id="last_name" placeholder="LastName"
+                    required
+                    [(ngModel)]="user.last_name" name="last_name" #last_name="ngModel">
+                    <div [hidden]="last_name.valid || last_name.pristine"
+                         class="alert alert-danger">
+                        Last Name is required
+                    </div>
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="employeeid">Employee ID</label>
+                    <input type="number" class="form-control" id="employee_id" 
+                    placeholder="Employee ID"
+                    required
+                    [(ngModel)]="user.employee_id" name="employee_id" #employee_id="ngModel">
+                    <div [hidden]="employee_id.valid || employee_id.pristine"
+                         class="alert alert-danger">
+                         Employee ID is required
+                    </div>
+                  </div>
+                  
+                  <div class="btn-group btn-group-sm">
+<span *ngIf="getCheckID">
+<button type="button"  class="btn btn-info" (click)="updateUser()" [disabled]="!userForm.form.valid">Update </button> &nbsp;
+</span>
+<span *ngIf="!getCheckID">
+<button type="button"  class="btn btn-info" (click)="adduser()" [disabled]="!userForm.form.valid">Add </button> &nbsp;
+</span>
+<button type="reset" class="btn btn-dark">Reset</button>
+                  </div>
+                </form>
+    </div>
+</div>
+
+<div class="card" >
+        <div class="card-body" *ngIf="userList; else templateName">
+
+     <div class="input-group">
+            <label>Sort :</label><p>&nbsp;</p>
+            
+            <span class="input-group-btn">
+                <input type="text" [(ngModel)]="searchText" class="form-control" placeholder="Search"><p>&nbsp;</p>
+            </span><p>&nbsp;</p><p>&nbsp;</p>
+             <span class="input-group-btn">
+                <button id="first_name" (click)="getUsers('first_name')"   class="btn btn-default">First Name</button>
+              </span> <p>&nbsp;</p><p>&nbsp;</p>
+              <span class="input-group-btn">
+                  <button id="last_name" (click)="getUsers('last_name')"  class="btn btn-default">Last Name</button>
+                </span><p>&nbsp;</p><p>&nbsp;</p>
+                <span class="input-group-btn">
+                    <button id="employee_id" (click)="getUsers('employee_id')"  class="btn btn-default">Employee Id</button>
+                  </span>
+          </div>
+       
+
+
+    <table class="table table-hover" style ="font-size:12px;">
+        <thead>
+        <tr>
+            <td><b>First Name</b></td>
+            <td><b>Last Name</b></td>
+            <td><b>Employee ID</b></td>
+            <td colspan="2"></td>
+        </tr>
+        </thead>
+         <tbody *ngIf="userList">
+       <tr *ngFor="let ul of userList | filter : {first_name: searchText, last_name:searchText,  employee_id: searchText}; let i=index;">
+                <td>{{ ul.first_name }}</td>
+                <td>{{ ul.last_name }}</td>
+                <td>{{ ul.employee_id }}</td>
+                <td>
+                 <button (click)="findbyID(ul._id)"  class="btn btn-info btn-xs">Edit</button>
+                </td>
+                <td>
+                <button (click)="deleteUser(ul._id)"  class="btn btn-danger btn-xs">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+      </table>
+</div>
+<ng-template #templateName>
+        <br> <div class="alert alert-info">
+                                <div class="row justify-content-around">
+                             <p>  <b> No Users Found. </b></p>
+                      </div>
+                </div>
+</ng-template>
+</div>

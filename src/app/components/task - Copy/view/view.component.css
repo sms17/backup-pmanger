@@ -1,0 +1,17 @@
+hr#afterSearchView{
+    border: 1px dashed dimgrey;
+}
+
+
+td#taskCell, td#parentTaskCell{
+    min-width: 100px;
+}
+
+td#priorityCell{
+    min-width: 20px;
+}
+
+td.dateCell, td.app-btn{
+    min-width: 40px;
+}
+

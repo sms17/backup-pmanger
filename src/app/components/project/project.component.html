@@ -1,0 +1,152 @@
+
+<div class="card">
+        <h3 class="text-center">
+        <font  style="height:5%;font-size: 14px;font-family: Verdana, Geneva, sans-serif;" 
+        color="#3f88b3">
+        <b>Project</b></font></h3>
+                <hr>
+    <div class="card-body">
+        <form #projectForm="ngForm">
+    <div class="form-group row">
+        <label for="inputPassword3" class="col-sm-2 col-form-label">Project:</label>
+        <div class="col-sm-6">
+              <input type="text" class="form-control" id="project" required
+              [(ngModel)]="projectObj.project" name="project" #project="ngModel">
+         </div>
+      </div>
+      <div [hidden]="project.valid || project.pristine"
+      class="alert alert-danger">
+         Project is required
+     </div>
+
+   <div class="form-group row">
+          <div class="col-sm-2"></div>
+          <div class="col-sm-4">
+            <div class="form-check">
+                <input type="checkbox" id="getcheck" name="getcheck" [(ngModel)] ="showMe">
+                 <label class="form-check-label" for="gridCheck1">
+                    &nbsp;Set Start and End Date
+              </label>
+            </div>
+        </div>
+      </div> <!-- *ngIf="showMe" -->
+        <div class="form-group row" *ngIf="showMe">
+            <label for="inputPassword3" class="col-sm-2 col-form-label"></label>
+          
+            <div class="col-sm-4">
+                    <input type="date" class="form-control" name="start_date" id="start_date"
+                    [(ngModel)]="projectObj.start_date" #start_date="ngModel">
+            </div>
+          
+          <div class="col-sm-4">
+                <input type="date" class="form-control" name="end_date" id="end_date"
+                [(ngModel)] ="projectObj.end_date" #end_date="ngModel">
+                    </div>
+      
+    </div>
+        <div class="form-group row">
+            <label for="inputPassword3" class="col-sm-2 col-form-label">Priority:</label>
+            <div class="col-sm-6">
+                  <input type="range"  class="form-control" id="priority" 
+                required
+              [(ngModel)]="projectObj.priority" name="priority" #priority="ngModel" min="0" max="30"
+               value="0"   oninput="amount.value=priority.value">                                                       
+         Selected Value : 
+         <output id="amount" name="amount" for="priority">{{ projectObj.priority }}</output>
+
+           </div>
+        </div>
+        <div [hidden]="priority.valid || priority.pristine"
+        class="alert alert-danger">
+           priority is required
+       </div>
+
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 col-form-label">Manager :</label>
+            <div class="col-sm-6">
+                 <ng-template #rt let-r="result.first_name" let-t="term">
+                    <ngb-highlight [result]="r" [term]="t"></ngb-highlight>
+                  </ng-template>
+                  <input id="typeahead-template" type="text" class="form-control" 
+                    [(ngModel)]="projectObj.manager" [ngbTypeahead]="search" [resultTemplate]="rt" 
+                      [inputFormatter]="formatter" [ngModelOptions]="{standalone: true}" />
+         </div>
+           <div class="col-sm-2">
+              <input type="button" value="search">
+          </div>
+        </div>
+        
+      
+            <div class="btn-group btn-group-sm">
+                <span *ngIf="getCheckID">
+                <button type="button"  class="btn btn-info" (click)="updateProject()" [disabled]="!projectForm.form.valid">Update </button> &nbsp;
+                </span>
+                <span *ngIf="!getCheckID">
+                <button type="button"  class="btn btn-info" (click)="addProject()" [disabled]="!projectForm.form.valid">Add </button> &nbsp;
+                </span>
+                <button type="reset" class="btn btn-dark">Reset</button>
+            </div>
+       </form>
+    </div>
+</div>
+
+<div class="card" >
+        <div class="card-body" *ngIf="projectList; else templateName">
+
+    
+     <div class="input-group">
+            <label><b>Search</b> :</label><p>&nbsp;</p>
+            <span class="input-group-btn">
+                <input type="text" [(ngModel)]="searchText" class="form-control" placeholder="Search"><p>&nbsp;</p>
+            </span><p>&nbsp;</p><p>&nbsp;</p>
+            <br>
+            <label><b>Sort</b> :</label><p>&nbsp;</p>
+            <span class="input-group-btn">
+                <button id="sort_start_date" (click)="getProjects('start_date')"   class="btn btn-default">Start date</button>
+              </span> <p>&nbsp;</p><p>&nbsp;</p>
+              <span class="input-group-btn">
+                  <button id="sort_end_date" (click)="getProjects('end_date')"  class="btn btn-default">End Date</button>
+                </span><p>&nbsp;</p><p>&nbsp;</p>
+                <span class="input-group-btn">
+                    <button id="sort_priority" (click)="getProjects('priority')"  class="btn btn-default">Priority </button>
+                  </span>
+    </div>
+  
+
+    <table class="table table-hover" style ="font-size:12px;">
+        <thead>
+        <tr>
+            <td><b>Project</b></td>
+            <td><b>Start Date</b></td>
+            <td><b>End Date</b></td>
+            <td><b>Priority</b></td>
+            <td><b>Manager</b></td>
+            <td colspan="2"></td>
+        </tr>
+        </thead>
+         <tbody *ngIf="projectList">
+      <tr *ngFor="let ul of projectList | filter : {project: searchText, priority: searchText}; 
+      let i=index;">
+       <td>{{ ul.project }}</td>
+                <td>{{ ul.start_date | date:"dd-MMM-yyyy" }}</td>
+                <td>{{ ul.end_date | date:"dd-MMM-yyyy" }}</td>
+                <td>{{ ul.priority }}</td>
+                <td>{{ ul.manager | findusername : usersResult }}</td>
+                <td>
+                 <button (click)="findbyID(ul._id)"  class="btn btn-info btn-xs">Edit</button>
+                </td>
+                <td>
+                <button (click)="deleteProject(ul._id)"  class="btn btn-danger btn-xs">Delete</button>
+                </td>
+            </tr>
+        </tbody>
+      </table>
+</div>
+<ng-template #templateName>
+        <br> <div class="alert alert-info">
+                                <div class="row justify-content-around">
+                             <p> <b> No Projects Found. </b></p>
+                      </div>
+                </div>
+</ng-template>
+</div>

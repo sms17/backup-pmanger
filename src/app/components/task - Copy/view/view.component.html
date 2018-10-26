@@ -1,0 +1,93 @@
+<div class="card">
+        <div class="card-body">
+        <div class="form-group row">
+        <label for="end_date" class="col-sm-3 text-primary"><strong>Search Project:</strong></label>
+            <div class="col-sm-5">
+                    <input type="text" class="form-control"  #instance="ngbTypeahead" 
+                    (selectItem)="selectedItem($event)"  [inputFormatter]="formatterProject"
+                    [(ngModel)]="model" [ngbTypeahead]="searchProject" 
+                    [resultFormatter]="formatterProject" />
+            </div> 
+            <div class="col-sm-4">
+                    <button  type="button" (click)="findTaskBySortProject('',model._id)"
+                     class="btn btn-info btn-sm">
+                    <span class="glyphicon glyphicon-search"></span> Search
+                  </button>
+                &nbsp;
+                  <button id="reset" (click)="reset()"
+                  class="btn btn-warning btn-sm"> Reset </button>
+             </div>
+        </div>
+   </div>
+</div>
+
+
+<div class="card" >
+        <div class="card-body" *ngIf="tasksResult; else templateName">
+
+    <div class="form-group row">
+            <label for="end_date" class="col-sm-3 text-primary"><strong>Sort:</strong></label>
+                    <div class="col-sm-9">
+                    <button type="button"  (click)="findTaskBySortProject('start_date',model._id)"
+                    class="btn btn-secondary btn-sm">
+                    <span class="glyphicon glyphicon-triangle-top"></span> Start Date
+                    </button>
+                        &nbsp;
+                    <button type="button"  (click)="findTaskBySortProject('end_date',model._id)"
+                    class="btn btn-secondary btn-sm">
+                    <span class="glyphicon glyphicon-sort"></span> End Date
+                    </button>
+                    &nbsp;
+                    <button type="button"  (click)="findTaskBySortProject('priority',model._id)"
+                    class="btn btn-secondary btn-sm">
+                    <span class="glyphicon glyphicon-sort"></span> Priority
+                    </button>
+                    &nbsp;
+                    <button type="button"  (click)="findTaskBySortProject('completed',model._id)"
+                    class="btn btn-secondary btn-sm">
+                    <span class="glyphicon glyphicon-sort"></span> Completed
+                    </button>
+                </div>
+        </div>
+    <table class="table table-striped" style ="font-size:12px;">
+        <thead>
+        <tr>
+           <td><b>Project</b></td> 
+            <td><b>Task</b></td>
+            <td><b>Priority</b></td>
+            <td><b>Parent Task</b></td>
+            <td><b>Start Date</b></td>
+            <td><b>End Date</b></td>
+           <!-- <td><b>User</b></td> -->
+            <td colspan="2"></td>
+        </tr>
+        </thead>
+         <tbody >
+      <tr *ngFor="let ul of tasksResult">
+            <td>{{ ul.project | findprojectname : projectsResult }}</td> 
+                <td>{{ ul.task }}</td>
+                <td>{{ ul.priority }}</td>
+                <td>{{ ul.parent_task | findtaskname : tasksResult }}</td>
+                <td>{{ ul.start_date | date:"dd-MMM-yyyy" }}</td>
+                <td>{{ ul.end_date | date:"dd-MMM-yyyy" }}</td>
+             <!--   <td>{{ ul.user | findusername : usersResult }}</td> -->
+        
+                <td><a [routerLink]="['/updatetask', ul._id]" class='btn btn-info m-r-5px'>
+                    <span class='glyphicon glyphicon-edit'></span> Edit
+                </a></td>
+                <td><button (click)="deleteTask(ul._id)"  class="btn btn-danger btn-sm">End Task</button></td>
+        </tr>
+    </tbody>
+    </table>
+
+      
+</div>
+<ng-template #templateName>
+    <br>
+    <div class="row justify-content-around">
+                    <div class="alert alert-info">
+                         <p>  No records found, Please search projects to filter task.</p>
+                  </div>
+            </div>
+    </ng-template>
+</div>

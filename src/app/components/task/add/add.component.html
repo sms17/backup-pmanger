@@ -1,0 +1,130 @@
+<div class="card">
+    <h3 class="text-center">
+    <font  style="height:5%;font-size: 14px;font-family: Verdana, Geneva, sans-serif;" 
+    color="#3f88b3">
+    <b>Add Task</b></font></h3>
+    <hr>
+    <div class="card-body">
+      <form #taskForm="ngForm">
+        
+    <div class="form-group row">
+      <label for="task" class="col-sm-3 col-form-label">Project </label>
+      <div class="col-sm-9">
+            <ng-template #pr let-p="result" let-r="term">
+                <ngb-highlight [result]="p.project" [term]="r"></ngb-highlight>
+            </ng-template>
+            <input id="typeahead-template" type="text" class="form-control"
+            [(ngModel)]="taskObj.project" [ngbTypeahead]="searchProject" [resultTemplate]="pr"
+           [inputFormatter]="formatterProject" [ngModelOptions]="{standalone: true}" />
+        </div>
+    </div>
+   
+      <div class="form-group row">
+         <label for="task" class="col-sm-3 col-form-label"> </label>
+           <div class="col-sm-9">
+             <div class="form-check">
+                  <label class="form-check-label" for="gridCheck1">
+                    &nbsp; Parent Task
+              </label>
+            </div>
+        </div>
+      </div>
+    
+      <div class="form-group row">
+          <label for="task" class="col-sm-3 col-form-label">Task</label>
+          <div class="col-sm-9">
+              <input type="text" class="form-control" id="project" required
+              [(ngModel)]="taskObj.task" name="project"  #project="ngModel">
+          </div>
+      </div>
+      
+    <div id="showhide" *ngIf="!showMe">          
+         <div class="form-group row">
+            <label for="priority" class="col-sm-3 col-form-label">Priority</label>
+                <label class="col-sm-1 col-form-label">0</label>
+            <div class="col-sm-5">
+              <input type="range"  class="form-control" id="priority" 
+              required
+            [(ngModel)]="taskObj.priority" name="priority" #priority="ngModel" min="0" max="30"
+             value="0"   oninput="amount.value=priority.value">                                                       
+       Selected Value : 
+       <output id="amount" name="amount" for="priority">{{taskObj.priority}}</output>
+            </div>
+            <label class="col-sm-1 col-form-label">30</label>
+        </div>
+        
+        <div class="form-group row">
+            <label for="parentTask" class="col-sm-3 col-form-label">Parent Task</label>
+            <div class="col-sm-9">
+                <ng-template #st let-s="result" let-t="term">
+                    <ngb-highlight [result]="s.task" [term]="t"></ngb-highlight>
+                </ng-template>
+                <input id="typeahead-template" type="text" class="form-control"
+                [(ngModel)]="taskObj.parent_task" [ngbTypeahead]="searchTask" [resultTemplate]="st"
+               [inputFormatter]="formatterTask"  [ngModelOptions]="{standalone: true}"/>
+            </div>
+            
+        </div>
+        
+      <!--  <div class="form-group row">
+            <label for="start_date" class="col-sm-3 col-form-label">Start Date</label>
+            <div class="col-sm-9">
+               <input type="text" class="form-control" style="width:300px;" 
+                (focus)="start_date.open()" ngbDatepicker 
+                #start_date="ngbDatepicker" id="start_date" 
+                name="start_date" [(ngModel)]="taskObj.start_date">
+        </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="end_date" class="col-sm-3 col-form-label">End Date</label>
+            <div class="col-sm-9">
+                <input type="text" class="form-control" style="width:300px;" 
+                (focus)="end_date.open()" ngbDatepicker 
+                #end_date="ngbDatepicker" id="end_date"
+                id="end_date" name="end_date" [(ngModel)]="taskObj.end_date">
+          </div>
+          </div>
+        -->
+          <div class="form-group row">
+            <label for="start_date" class="col-sm-3 col-form-label">Start Date </label>
+            <div class="col-sm-9">
+                <input type="date" class="form-control" name="start_date" id="start_date"
+                [(ngModel)]="taskObj.start_date" #start_date="ngModel">
+        </div>
+        </div>
+       
+        <div class="form-group row">
+            <label for="end_date" class="col-sm-3 col-form-label">End Date </label>
+            <div class="col-sm-9">
+                <input type="date" class="form-control" name="end_date" id="end_date"
+                [(ngModel)]="taskObj.end_date" #start_date="ngModel">
+          </div>
+          </div>
+    </div>
+
+    <div class="form-group row">
+        <label for="task" class="col-sm-3 col-form-label">User</label>
+        <div class="col-sm-9">
+          <ng-template #ur let-u="result" let-r="term">
+            <ngb-highlight [result]="u.first_name" [term]="r"></ngb-highlight>
+          </ng-template>
+          <input id="typeahead-template" type="text" class="form-control" 
+            [(ngModel)]="taskObj.user" [ngbTypeahead]="search" [resultTemplate]="ur" 
+              [inputFormatter]="formatter" [ngModelOptions]="{standalone: true}" />
+        </div>
+    </div>
+
+  <div class="form-group row">
+    <div class="col-sm-3 offset-sm-3">
+      <button type="button"  class="btn btn-info" (click)="addTask()" 
+      [disabled]="!taskForm.form.valid">Add </button> &nbsp;
+    </div>
+    <div class="col-sm-3">
+        <button type="reset" class="btn btn-dark">Reset</button>
+    </div>
+  </div>
+
+</form>
+</div>
+</div>
